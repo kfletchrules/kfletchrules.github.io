@@ -1,4 +1,4 @@
-# Classifying Healthcare Procurement Data Machione Learning  
+# Classifying Healthcare Procurement Data using Machine Learning  
 <img align="right" width="300" height="300" src="/assets/IMG/ML class final proj logo.png">
 
 ### Introduction
