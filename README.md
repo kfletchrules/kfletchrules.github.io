@@ -9,8 +9,6 @@
 
 ### Results
 
-### Results
-
 ### Discussion
 
 ### References
