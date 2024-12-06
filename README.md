@@ -85,12 +85,17 @@ Figure 4. Feature contributions by weight.
 
 *Visualization*
 
+The Decision Tree Classifier was visualized using plot_tree, showing how features contribute to the prediction of emissions binning categories (low, medium, high). The visual representation (Figure 5) provides insights into the mechanisms of the model and features importance for classification.
+	
+ Additionally, a t-SNE (t-distributed Stochastic Neighbor Embedding) visualization (Figure 6) was generated to see the relationship between data points in 2D. The scaled Word2Vec similarity scores and scaled quantities were used as input features.
 
 *Fine Tuning*
 
+Utilizing GridSearchCV, hyperparameter tuning for a DecisionTreeClassifier was performed to identify optimum model performance. The grid search evaluates all combinations for maximum tree depth, minimum samples required to split an internal node, and minimum samples required to be a leaf node with a 3-fold cross-validation, scoring based on accuracy. Fine tuning allows for better generalization and performance.
 
 *Model Evaluation*
 
+A confusion matrix (Figure 7) was generated to evaluate the performance of the Decision Tree Classifier model in predicting emissions categories (low, medium, high). By using the y_test and y_pred labels, we can see the number of correct predictions for each binning category. It provides a clear summary of the model’s strengths and weaknesses.
 
 ### Results
 
