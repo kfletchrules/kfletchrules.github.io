@@ -15,12 +15,21 @@ The dataset used in this study was provided by University of San Francisco (UCSF
 Figure 1. log10 scale distribution of product quantities across the 25,000 products.
 
 ### Modeling
-  The objective of this study was to attempt to predict whether healthcare items were low, medium, or high emissions products based on their text description and annual quantities. The main machine learning approach utilized in this study was K-means (and Minibatch K-Means). Decision Tree and Random Forest Classification were attempted, but due to the diversity and volume of products to be analyzed it was determined to be unfeasible for the timeline of this project.  The workflow of this study began with pre-processing text data, followed by k-means and minibatch k-means clustering, cosine similarity calculation, and concluded with cluster visualization.
+  The objective of this study was to attempt to predict whether healthcare items were low, medium, or high emissions products based on their text description, annual quantities, and annual cost. The main machine learning approaches utilized in this study were **K-means** and **Decision Tree Classification**. The workflow of this study began with preprocessing text data, followed by k-means clustering, cosine similarity calculation, decision tree model training, fine tuning, visualization and concluded with a confusion matrix model evaluation.
   
-*Pre-processing*
+*Preprocessing*
 
-  After loading the dataset into Google Collab, item descriptions (categorical), yearly total quantity (continuous), department (categorical), and yearly total cost (continuous) were extracted as relevant columns to later be combined as a feature set. Continuous data such as yearly total cost and yearly total quantity were scaled using MinMaxScaler. Wordtokenizer was utilized to vectorize the item descriptions into tokens, which were then cleaned to convert the text to lowercase, and remove stopwords, spaces, and the catalog number at the end of the description. Empty descriptions were filtered out. The cleaned tokens were used to train the Word2Vec model, which then generated 100 vector embeddings to represent the text descriptions. There were 3 cases of manual tagging for keywords such as “disposable”, “implant”, and “single-use” to capture specific attributes. The categorical and continuous features were then combined into a single feature set array. The output shapes of the combined features were then generated to be, (25959, 106).
-  
+  After loading the dataset into Google Collab, item descriptions (categorical), yearly total quantity (continuous), department (categorical), and yearly total cost (continuous) were extracted as relevant columns to later be combined as a feature set. Continuous data such as yearly total cost and yearly total quantity were scaled using MinMaxScaler. Wordtokenizer was utilized to vectorize the item descriptions into tokens, which were then cleaned to convert the text to lowercase, and remove stopwords, spaces, and the catalog number at the end of the description. Empty descriptions were filtered out. The cleaned tokens were used to train the Word2Vec model, which then generated 100 vector embeddings to represent the text descriptions. There were 3 cases of manual tagging for keywords such as “disposable”, “implant”, and “single-use” to capture specific attributes. The categorical and continuous features were then combined into a single feature set array. The output shapes of the combined features were then generated to be, (25959, 106). Below is a list of words that were excluded, because they are not in the Word2Vec vocabulary.
+
+```python
+Tokens not in Word2Vec vocabulary: ['tscd', 'welding', 'wafers', '1scw017']
+Tokens not in Word2Vec vocabulary: ['micropak']
+Tokens not in Word2Vec vocabulary: ['breathcall', 'e1240']
+Tokens not in Word2Vec vocabulary: ['filament', 'miloop', 'nitinal', '303071', '9090']
+Tokens not in Word2Vec vocabulary: ['logan', 'tractor', 'bow', 'n5958']
+Tokens not in Word2Vec vocabulary: ['liquinox', 'concentrated', 'nc1512794']
+ ```
+ 
 *K-Means Clustering*
 
   K-Means clustering was applied to the combined feature set and tasked to group the data into 3 corresponding clusters, “low”, “medium”, and “high”. K-Means works iteratively to assign data to clusters, minimizing intra-cluster variance. In this study 10 random initializations and a maximum of 300 iterations were performed. Once the model was fit, the final labels are added into a new ‘cluster’ column for use in the Decision Tree later. Cluster performance was evaluated using the silhouette score, measuring separation and cohesion between clusters. 
@@ -44,19 +53,78 @@ proxy['EMISSIONS'] = (
     0.05 * proxy['word2vec_similarity_scaled']  # Add Word2Vec contribution
 )
 ```
-
+This emissions score is used to categorize products into 3 bins, “low", “medium”, and “high” emissions. The thresholds for these bins were determined from trial and error. LabelEncoder was used to encode the bins numerically. A histogram was created to show binning distribution, as seen in Figure 3.
 
 *Train Decision Tree Classifier*
 
+  DecisionTreeClassifier was used to predict emissions categories (low, medium, high) based on the combined feature set proxy[‘EMISSIONS’]. An 80-20 training/test split was implemented on the dataset. Initially the maximum depth was set at 5, but was later evaluated to be optimized at 3. The model’s accuracy was evaluated and detailed in the classification report, which includes precision, recall, and F-1 scores for each of the 3 categories.
 
-  
-*Visualization, Model Evaluation, and Fine Tuning*
+```python
+Classification Report:
+Accuracy: 0.9994221879815101
+              precision    recall  f1-score   support
 
-  A 2D t-SNE visualization was generated to show a scatter plot of clusters and their assigned labels. A box plot was also generated to show the distribution of clusters compared to the annual quantity variable. 
+         low       0.50      1.00      0.67         3
+      medium       1.00      1.00      1.00        18
+        high       1.00      1.00      1.00      5171
+
+    accuracy                           1.00      5192
+   macro avg       0.83      1.00      0.89      5192
+weighted avg       1.00      1.00      1.00      5192
+```
+Figure 2. Classification report of the Decision Tree Model.
   
+*Emissions Distribution*
+
+  The emissions score distribution (Figure 3) and feature contributions were visualized in histograms, to reveal distribution and frequency across the defined bins. Feature contributions were shown visually to highlight their relative weights, shown in Figure 4. These weights were chosen based on background knowledge of Life Cycle Assessment calculated emissions and healthcare products. 
+
+<img align="center" width="500" height="400" src="/assets/feature-contr.png">
+
+Figure 4. Feature contributions by weight.
+
+*Visualization*
+
+
+*Fine Tuning*
+
+
+*Model Evaluation*
+
+
 ### Results
 
+<img align="center" width="500" height="400" src="/assets/emissions-score-distr.png">
+
+Figure 3. Emissions score distribution based on frequency.
+
+<img align="center" width="700" height="500" src="/assets/decision-tree.png">
+
+Figure 5. Decision Tree Model with maximum depth of 3.
+
+<img align="center" width="700" height="500" src="/assets/tsne.png">
+
+Figure 6. t-SNE visualization of the scaled Word2Vec similarity scores and scaled quantities in 2D.
+
+<img align="center" width="500" height="400" src="/assets/confusion-matrix.png">
+
+Figure 7. Confusion matrix of Decision Tree Model.
+
 ### Discussion
+
+  From the figures and tables included above it has been made increasingly clear that utilizing procurement data to predict emissions categorization is a complex endeavor that will require much more precise feature engineering. From the K-Means clustering a silhouette score of 0.283 is indicative of weak clustering and suggests that the text descriptions do not naturally form well-defined groups, which lead to large overlap in emissions categorization. The Word2Vec similarity matrix showed an average of 0.316∓0.115, which also concludes a low degree of similarity from the text descriptions. Due to the diversity in the product descriptions and the naming conventions unique to healthcare, there is no shortage of noise in the data, as shown in the t-SNE visual (Figure 6). 
+  
+  The distribution of emissions bins is heavily skewed in favor of ‘medium’, with 104 products in this category. There were 34 products in the ‘high’ and 0 in the ‘low’ categories respectively. The imbalance suggests an issue in either the emissions weighting formula or the binning thresholds (which were chosen with trial and error), leading to unreliable and biased predictions. Although the decision tree shows an almost perfect accuracy score of 0.99, the confusion matrix is overwhelmingly ‘NaN’, indicating overfitting due to class imbalance.
+
+### Conclusion
+
+  In conclusion, the machine learning approaches used in this study, although unsuccessful in categorizing emissions data, were successful in forging the first steps in a new direction for product emissions predictions. Life Cycle Assessments are cumbersome and require expertise that can be out of reach for some organizations, but machine learning models could be the answer.  Emissions disclosure and reporting is increasing every year and new methods are needed to enhance efficiency in identifying areas for reductions, and improve accuracy in measuring and reporting. 
+  
+	Future improvements to continue this study are as follows:
+1. Address emissions class imbalance by refining the binning thresholds and adjust the decision tree weighting.
+2. Improve clustering with different algorithms that might work better for healthcare data, and enhance feature scaling and selection for cluster separation.
+3. Refining feature engineering.
+4. Create a robust set of labeled training data that is more precise and representative of actual emissions.
+
 
 ### Links
 [https://colab.research.google.com/drive/1HJcNoHLEc2PlRUwgHd1gAq94qvvUmWHR?usp=sharing](https://colab.research.google.com/drive/1PHGK2SekXQPSCfYeHp34Myr-Iu-fa_T0?usp=sharing)
