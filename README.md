@@ -136,7 +136,7 @@ Figure 7. Confusion matrix of Decision Tree Model.
 
 [https://colab.research.google.com/drive/1HJcNoHLEc2PlRUwgHd1gAq94qvvUmWHR?usp=sharing](https://colab.research.google.com/drive/1PHGK2SekXQPSCfYeHp34Myr-Iu-fa_T0?usp=sharing)
 
-<a href="kfletchrules.github.io/assets/ML-finalproject-v1FINAL.pdf" target="ML-finalproject-v1FINAL">Final Report - Kelli Fletcher.</a>
+[https://github.com/kfletchrules/kfletchrules.github.io/blob/e7d08a0f472a135d4cd9e601560d8df3a838c3cf/assets/ML-finalproject-v1FINAL.pdf](https://github.com/kfletchrules/kfletchrules.github.io/blob/e7d08a0f472a135d4cd9e601560d8df3a838c3cf/assets/ML-finalproject-v1FINAL.pdf)
 
 ### References
 Agbafe, V. C., Singh, H., & Cerceo, E. (2024). Comprehensive SEC Disclosure Rules Can Reduce Health Care Emissions. Health Affairs Forefront. https://doi.org/10.1377/forefront.20240814.180078
