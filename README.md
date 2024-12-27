@@ -134,7 +134,7 @@ Figure 7. Confusion matrix of Decision Tree Model.
 
 ### Links
 
-[https://colab.research.google.com/drive/1HJcNoHLEc2PlRUwgHd1gAq94qvvUmWHR?usp=sharing](https://colab.research.google.com/drive/1PHGK2SekXQPSCfYeHp34Myr-Iu-fa_T0?usp=sharing)
+Google Collab Link
 
 [https://github.com/kfletchrules/kfletchrules.github.io/blob/e7d08a0f472a135d4cd9e601560d8df3a838c3cf/assets/ML-finalproject-v1FINAL.pdf](https://github.com/kfletchrules/kfletchrules.github.io/blob/e7d08a0f472a135d4cd9e601560d8df3a838c3cf/assets/ML-finalproject-v1FINAL.pdf)
 
